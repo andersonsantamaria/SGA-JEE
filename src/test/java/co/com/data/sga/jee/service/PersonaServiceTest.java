@@ -5,33 +5,44 @@
  */
 package co.com.data.sga.jee.service;
 
-import org.junit.After;
-import org.junit.AfterClass;
+import co.com.data.sga.jee.domain.Persona;
+import java.util.List;
+import javax.ejb.embeddable.EJBContainer;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  *
  * @author Anderson
  */
 public class PersonaServiceTest {
-    
-    public PersonaServiceTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
+
+    private PersonaService personaService;
+
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
+        EJBContainer eJBContainer = EJBContainer.createEJBContainer();
+        personaService = (PersonaService) eJBContainer.getContext().lookup("java:global/classes/PersonaServiceImpl!co.com.data.sga.jee.service.PersonaService");
+    }
+
+    @Test
+    public void testEJBPersonaService() {
+        System.out.println("Iniciando test EJB PersonaService");
+        assertTrue(personaService != null);
+        
+        assertEquals(2, personaService.listarPersonas().size());
+        
+        System.out.println("El no. de personas es igual a: "+ personaService.listarPersonas().size());
+        
+        this.desplegarPersonas(personaService.listarPersonas());
+        System.out.println("Fin test EJB PersonaService");
     }
     
-    @After
-    public void tearDown() {
-    }    
+    private void desplegarPersonas(List<Persona> personas){
+        for (Persona persona: personas){
+            System.out.println(persona);
+        }
+    }
 }
